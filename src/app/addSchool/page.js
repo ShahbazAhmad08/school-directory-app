@@ -1,6 +1,8 @@
 "use client";
 
 import { useForm } from "react-hook-form";
+import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
 
 export default function AddSchoolPage() {
   const {
@@ -9,6 +11,7 @@ export default function AddSchoolPage() {
     reset,
     formState: { errors },
   } = useForm();
+  const router = useRouter();
 
   const onSubmit = async (data) => {
     const formData = new FormData();
@@ -33,13 +36,25 @@ export default function AddSchoolPage() {
 
     if (res.ok) {
       reset();
-      alert("School added successfully!");
+      Swal.fire({
+        title: "Success!",
+        text: "School added successfully!",
+        icon: "success",
+        confirmButtonText: "OK",
+      }).then(() => {
+        // Redirect after clicking OK
+        router.push("/showSchools");
+      });
     } else {
       const err = await res.json();
-      alert("Error: " + err.error);
+      Swal.fire({
+        title: "Error!",
+        text: err.error || "Something went wrong",
+        icon: "error",
+        confirmButtonText: "Try Again",
+      });
     }
   };
-
   return (
     <div className="max-w-lg mx-auto p-6">
       <h1 className="text-2xl font-bold mb-4">Add School</h1>
