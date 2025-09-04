@@ -6,6 +6,7 @@ import path from "path";
 export const runtime = "nodejs"; // ensure Node runtime
 
 export async function GET() {
+  console.log("DB_HOST:", process.env.DB_HOST);
   try {
     const [rows] = await db.query(
       "SELECT * FROM schools ORDER BY created_at DESC"
